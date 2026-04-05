@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kosmos | Greek Learning</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">Kosmos</div>
+    <nav class="nav-links" id="nav-auth"></nav>
+  </header>
+
+  <main class="page-shell">
+    <section class="hero-card">
+      <h1>Welcome to Kosmos</h1>
+      <p>Your Greek learning dashboard is waiting.</p>
+    </section>
+
+    
+  </main>
+
+  <script src="/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      loadAuthNav();
+      personalizeHomePage();
+    });
+  </script>
+</body>
+</html>

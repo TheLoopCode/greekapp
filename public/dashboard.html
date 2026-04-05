@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard | Kosmos</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">Kosmos</div>
+    <nav class="nav-links" id="nav-auth"></nav>
+  </header>
+
+  <main class="page-shell">
+    <section class="hero-card">
+      <h1>Welcome back to Kosmos</h1>
+      <p>Continue your Greek learning journey.</p>
+    </section>
+
+    <section class="dashboard-grid">
+      <article>
+        <h2>Greek Alphabet</h2>
+        <p>Master the Greek letters and their pronunciations.</p>
+        <a class="button button-primary" href="#">Start Lesson</a>
+      </article>
+      <article>
+        <h2>Vocabulary Builder</h2>
+        <p>Learn essential Greek words and phrases.</p>
+        <a class="button button-primary" href="#">Practice Now</a>
+      </article>
+      <article>
+        <h2>Daily Challenge</h2>
+        <p>Test your knowledge with today's quiz.</p>
+        <a class="button button-primary" href="#">Take Quiz</a>
+      </article>
+      <article>
+        <h2>Progress Tracker</h2>
+        <p>View your learning stats and achievements.</p>
+        <a class="button button-primary" href="#">View Progress</a>
+      </article>
+    </section>
+  </main>
+
+  <script src="/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      requireAuth();
+      loadAuthNav();
+    });
+  </script>
+</body>
+</html>
