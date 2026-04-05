@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Daily Challenge | Kosmos</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">Kosmos</div>
+    <nav class="nav-links" id="nav-auth"></nav>
+  </header>
+
+  <main class="page-shell">
+    <section class="hero-card">
+      <h1>Daily Challenge</h1>
+      <p>Test your Greek knowledge with today's challenge.</p>
+    </section>
+
+    <section class="tool-content">
+      <div class="quiz">
+        <h2>Question 1: What is 'Hello' in Greek?</h2>
+        <button class="option" onclick="checkAnswer('Γεια')">Γεια</button>
+        <button class="option" onclick="checkAnswer('Αντίο')">Αντίο</button>
+        <button class="option" onclick="checkAnswer('Ευχαριστώ')">Ευχαριστώ</button>
+        <div id="result"></div>
+      </div>
+    </section>
+  </main>
+
+  <script src="/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      requireAuth();
+      loadAuthNav();
+    });
+
+    function checkAnswer(answer) {
+      const result = document.getElementById('result');
+      if (answer === 'Γεια') {
+        result.textContent = 'Correct!';
+        result.style.color = 'green';
+      } else {
+        result.textContent = 'Incorrect. The answer is Γεια.';
+        result.style.color = 'red';
+      }
+    }
+  </script>
+</body>
+</html>

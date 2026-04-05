@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson 2: Diphthongs & Special Combinations | Kosmos</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">Kosmos</div>
+    <nav class="nav-links" id="nav-auth"></nav>
+  </header>
+
+  <main class="page-shell">
+    <section class="hero-card">
+      <h1>Lesson 2: Diphthongs & Special Combinations</h1>
+      <p>Learn the most important Greek vowel pairs and consonant combinations, then practice with flashcards.</p>
+      <button class="button button-primary" id="home-redirect">Return to Learning Path</button>
+    </section>
+
+    <section class="tool-content">
+      <div class="lesson-description">
+        <p>Greek diphthongs are vowel pairs that produce a single sound, like αι, ει, οι, and ου. Some letters change their sound depending on what follows, and a few combinations behave like special consonants.</p>
+        <p>Note: αι and ει usually sound like /eh/ and /ee/, while οι and ου sound like /ee/ and /oo/. Exceptions happen in modern Greek when ευ and αυ switch between /ev/ or /ef/ and /av/ or /af/ depending on the next consonant.</p>
+        <p>Use the practice cards below to learn the pronunciation, exception rules, and correct Greek spelling.</p>
+      </div>
+
+      <button class="button button-secondary" id="add-diphthongs-btn">Add Diphthong Flashcards</button>
+
+      <div class="practice-grid" id="practice-grid"></div>
+
+      <div class="lesson-controls">
+        <button class="button button-primary" id="complete-lesson-btn">Complete Lesson</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="/app.js"></script>
+  <script>
+    const diphthongs = [
+      { combo: 'αι', sound: 'eh', example: 'αι -> σαν (like)' },
+      { combo: 'ει', sound: 'ee', example: 'ει -> είμαι (I am)' },
+      { combo: 'οι', sound: 'ee', example: 'οι -> οικογένεια (family)' },
+      { combo: 'ου', sound: 'oo', example: 'ου -> ουρά (tail)' },
+      { combo: 'ευ', sound: 'ev/ef', example: 'ευ -> ευχαριστώ (thank you)' },
+      { combo: 'αυ', sound: 'av/af', example: 'αυ -> αυτό (this)' },
+      { combo: 'γγ', sound: 'ng', example: 'γγ -> άγγελος (angel)' },
+      { combo: 'γκ', sound: 'g/k', example: 'γκ -> γκάζι (gas)' },
+      { combo: 'μπ', sound: 'b', example: 'μπ -> μπανάνα (banana)' },
+      { combo: 'ντ', sound: 'd', example: 'ντ -> ντουλάπα (wardrobe)' }
+    ];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      requireAuth();
+      loadAuthNav();
+      renderPracticeGrid();
+      document.getElementById('home-redirect').addEventListener('click', () => {
+        window.location.href = '/greek-learning-path.html';
+      });
+      document.getElementById('add-diphthongs-btn').addEventListener('click', addAllDiphthongFlashcards);
+      document.getElementById('complete-lesson-btn').addEventListener('click', completeLesson);
+    });
+
+    function renderPracticeGrid() {
+      const grid = document.getElementById('practice-grid');
+      grid.innerHTML = '';
+      diphthongs.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.className = 'lesson-card';
+        card.innerHTML = `
+          <h3>${item.combo}</h3>
+          <p><strong>Sound:</strong> ${item.sound}</p>
+          <p><strong>Example:</strong> ${item.example}</p>
+          <button class="button button-secondary" onclick="addDiphthongFlashcard(${index})">Add Card</button>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function addDiphthongFlashcard(index) {
+      const item = diphthongs[index];
+      const flashcards = JSON.parse(localStorage.getItem('kosmosFlashcards') || '[]');
+      const cardData = {
+        english: `${item.combo}`,
+        greek: `${item.sound}`
+      };
+      const alreadyExists = flashcards.some(f => f.english === cardData.english && f.greek === cardData.greek);
+      if (alreadyExists) {
+        alert('This diphthong is already in your flashcards.');
+        return;
+      }
+      flashcards.push(cardData);
+      localStorage.setItem('kosmosFlashcards', JSON.stringify(flashcards));
+      alert(`Added ${item.combo} flashcard.`);
+    }
+
+    function addAllDiphthongFlashcards() {
+      const flashcards = JSON.parse(localStorage.getItem('kosmosFlashcards') || '[]');
+      let addedCount = 0;
+      diphthongs.forEach(item => {
+        const cardData = {
+          english: `${item.combo}`,
+          greek: `${item.sound}`
+        };
+        const alreadyExists = flashcards.some(f => f.english === cardData.english && f.greek === cardData.greek);
+        if (!alreadyExists) {
+          flashcards.push(cardData);
+          addedCount += 1;
+        }
+      });
+      localStorage.setItem('kosmosFlashcards', JSON.stringify(flashcards));
+      alert(addedCount > 0 ? `Added ${addedCount} new diphthong flashcards.` : 'All diphthong flashcards are already in your collection.');
+    }
+
+    function completeLesson() {
+      localStorage.setItem('lesson2Completed', 'true');
+      alert('Lesson 2 complete! Return to the learning path to continue.');
+    }
+  </script>
+</body>
+</html>

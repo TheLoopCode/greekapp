@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flashcard Maker | Kosmos</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">Kosmos</div>
+    <nav class="nav-links" id="nav-auth"></nav>
+  </header>
+
+  <main class="page-shell">
+    <section class="hero-card">
+      <h1>Flashcard Maker</h1>
+      <p>Create custom flashcards to enhance your Greek learning.</p>
+    </section>
+
+    <section class="tool-content">
+      <div class="flashcard-creator">
+        <h2>Create New Flashcard</h2>
+        <form id="flashcard-form">
+          <label for="english">English:</label>
+          <input type="text" id="english" required>
+          <label for="greek">Greek:</label>
+          <input type="text" id="greek" required>
+          <button type="submit" class="button button-primary">Add Flashcard</button>
+        </form>
+        <div class="import-export-controls">
+          <button id="export-btn" class="button button-secondary">Export Flashcards</button>
+          <label for="import-file" class="button button-secondary import-btn">Import Flashcards</label>
+          <input type="file" id="import-file" accept=".json" style="display: none;">
+        </div>
+      </div>
+      <div class="flashcard-list">
+        <h2>Your Flashcards</h2>
+        <div id="flashcards"></div>
+      </div>
+    </section>
+  </main>
+
+  <script src="/app.js"></script>
+  <script src="/greek-words.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      requireAuth();
+      loadAuthNav();
+      loadFlashcards();
+    });
+
+    function loadFlashcards() {
+      let flashcards = JSON.parse(localStorage.getItem('kosmosFlashcards') || '[]');
+      if (flashcards.length === 0) {
+        // Add starter flashcards
+        flashcards = [
+          { english: "example", greek: "greek" }
+        ];
+        localStorage.setItem('kosmosFlashcards', JSON.stringify(flashcards));
+      }
+      const container = document.getElementById('flashcards');
+      container.innerHTML = '';
+      flashcards.forEach((card, index) => {
+        const cardEl = document.createElement('div');
+        cardEl.className = 'flashcard';
+        cardEl.innerHTML = `
+          <div class="card-front">${card.english}</div>
+          <div class="card-back">${card.greek}</div>
+          <button onclick="deleteFlashcard(${index})" class="button button-secondary">Delete</button>
+        `;
+        container.appendChild(cardEl);
+      });
+    }
+
+    document.getElementById('flashcard-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const english = document.getElementById('english').value;
+      const greek = document.getElementById('greek').value;
+      const flashcards = JSON.parse(localStorage.getItem('kosmosFlashcards') || '[]');
+      flashcards.push({ english, greek });
+      localStorage.setItem('kosmosFlashcards', JSON.stringify(flashcards));
+      document.getElementById('english').value = '';
+      document.getElementById('greek').value = '';
+      loadFlashcards();
+    });
+
+    function deleteFlashcard(index) {
+      const flashcards = JSON.parse(localStorage.getItem('kosmosFlashcards') || '[]');
+      flashcards.splice(index, 1);
+      localStorage.setItem('kosmosFlashcards', JSON.stringify(flashcards));
+      loadFlashcards();
+    }
+
+    function exportFlashcards() {
+      const flashcards = JSON.parse(localStorage.getItem('kosmosFlashcards') || '[]');
+      if (flashcards.length === 0) {
+        alert('No flashcards to export!');
+        return;
+      }
+      const dataStr = JSON.stringify(flashcards, null, 2);
+      const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+      
+      const exportFileDefaultName = 'kosmos-flashcards.json';
+      
+      const linkElement = document.createElement('a');
+      linkElement.setAttribute('href', dataUri);
+      linkElement.setAttribute('download', exportFileDefaultName);
+      linkElement.click();
+    }
+
+    function importFlashcards(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const importedFlashcards = JSON.parse(e.target.result);
+          if (!Array.isArray(importedFlashcards)) {
+            throw new Error('Invalid file format');
+          }
+          
+          const existingFlashcards = JSON.parse(localStorage.getItem('kosmosFlashcards') || '[]');
+          
+          // Filter out duplicates
+          const uniqueImported = importedFlashcards.filter(importedCard => {
+            return !existingFlashcards.some(existingCard => 
+              existingCard.english === importedCard.english && existingCard.greek === importedCard.greek
+            );
+          });
+          
+          if (uniqueImported.length === 0) {
+            alert('No new flashcards to import - all were duplicates!');
+            return;
+          }
+          
+          const mergedFlashcards = [...existingFlashcards, ...uniqueImported];
+          
+          localStorage.setItem('kosmosFlashcards', JSON.stringify(mergedFlashcards));
+          loadFlashcards();
+          alert(`Imported ${uniqueImported.length} new flashcards successfully!`);
+        } catch (error) {
+          alert('Error importing flashcards: ' + error.message);
+        }
+      };
+      reader.readAsText(file);
+      
+      // Reset the input so the same file can be imported again
+      event.target.value = '';
+    }
+
+    document.getElementById('export-btn').addEventListener('click', exportFlashcards);
+    document.getElementById('import-file').addEventListener('change', importFlashcards);
+  </script>
+</body>
+</html>

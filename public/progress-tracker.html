@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Progress Tracker | Kosmos</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">Kosmos</div>
+    <nav class="nav-links" id="nav-auth"></nav>
+  </header>
+
+  <main class="page-shell">
+    <section class="hero-card">
+      <h1>Progress Tracker</h1>
+      <p>Track your Greek learning progress and achievements.</p>
+    </section>
+
+    <section class="tool-content">
+      <div class="stats">
+        <div class="stat">Words Learned: <span id="words-learned">0</span></div>
+        <div class="stat">Flashcards Created: <span id="flashcards-created">0</span></div>
+        <div class="stat">Practice Sessions: <span id="practice-sessions">0</span></div>
+        <div class="stat">Streak: <span id="streak">0 days</span></div>
+      </div>
+    </section>
+  </main>
+
+  <script src="/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      requireAuth();
+      loadAuthNav();
+      loadProgress();
+    });
+
+    function loadProgress() {
+      const flashcards = JSON.parse(localStorage.getItem('kosmosFlashcards') || '[]');
+      document.getElementById('flashcards-created').textContent = flashcards.length;
+      // Other stats can be implemented similarly
+    }
+  </script>
+</body>
+</html>

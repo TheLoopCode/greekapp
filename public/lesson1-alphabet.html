@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson 1: Greek Alphabet | Kosmos</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">Kosmos</div>
+    <nav class="nav-links" id="nav-auth"></nav>
+  </header>
+
+  <main class="page-shell">
+    <section class="hero-card">
+      <h1>Lesson 1: Greek Alphabet</h1>
+      <p>Learn the Greek alphabet, including uppercase and lowercase letters, and add them as flashcards.</p>
+      <button class="button button-primary" id="home-redirect">Return to Learning Path</button>
+    </section>
+
+    <section class="tool-content">
+      <div class="lesson-description">
+        <p>This lesson helps you memorize each Greek letter by pairing the English letter name and sound with the Greek uppercase and lowercase form.</p>
+        <p>Use the button below to add all alphabet flashcards to your collection at once.</p>
+      </div>
+      <button class="button button-secondary" id="add-all-btn">Add All Flashcards</button>
+      <div class="alphabet-grid" id="alphabet-grid"></div>
+      <div class="lesson-controls">
+        <button class="button button-primary" id="complete-lesson-btn">Complete Lesson</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="/app.js"></script>
+  <script>
+    const alphabet = [
+      { name: 'Alpha', symbol: 'A', sound: 'ah', greekUpper: 'Α', greekLower: 'α' },
+      { name: 'Beta', symbol: 'B', sound: 'veh', greekUpper: 'Β', greekLower: 'β' },
+      { name: 'Gamma', symbol: 'G', sound: 'gah', greekUpper: 'Γ', greekLower: 'γ' },
+      { name: 'Delta', symbol: 'D', sound: 'th', greekUpper: 'Δ', greekLower: 'δ' },
+      { name: 'Epsilon', symbol: 'E', sound: 'eh', greekUpper: 'Ε', greekLower: 'ε' },
+      { name: 'Zeta', symbol: 'Z', sound: 'zeh', greekUpper: 'Ζ', greekLower: 'ζ' },
+      { name: 'Eta', symbol: 'H', sound: 'ee', greekUpper: 'Η', greekLower: 'η' },
+      { name: 'Theta', symbol: 'Th', sound: 'th', greekUpper: 'Θ', greekLower: 'θ' },
+      { name: 'Iota', symbol: 'I', sound: 'ee', greekUpper: 'Ι', greekLower: 'ι' },
+      { name: 'Kappa', symbol: 'K', sound: 'kah', greekUpper: 'Κ', greekLower: 'κ' },
+      { name: 'Lambda', symbol: 'L', sound: 'lah', greekUpper: 'Λ', greekLower: 'λ' },
+      { name: 'Mu', symbol: 'M', sound: 'moo', greekUpper: 'Μ', greekLower: 'μ' },
+      { name: 'Nu', symbol: 'N', sound: 'noo', greekUpper: 'Ν', greekLower: 'ν' },
+      { name: 'Xi', symbol: 'X', sound: 'ksee', greekUpper: 'Ξ', greekLower: 'ξ' },
+      { name: 'Omicron', symbol: 'O', sound: 'oh', greekUpper: 'Ο', greekLower: 'ο' },
+      { name: 'Pi', symbol: 'P', sound: 'pee', greekUpper: 'Π', greekLower: 'π' },
+      { name: 'Rho', symbol: 'R', sound: 'roh', greekUpper: 'Ρ', greekLower: 'ρ' },
+      { name: 'Sigma', symbol: 'S', sound: 'see', greekUpper: 'Σ', greekLower: 'σ/ς' },
+      { name: 'Tau', symbol: 'T', sound: 'tah', greekUpper: 'Τ', greekLower: 'τ' },
+      { name: 'Upsilon', symbol: 'U', sound: 'ee', greekUpper: 'Υ', greekLower: 'υ' },
+      { name: 'Phi', symbol: 'Ph', sound: 'fee', greekUpper: 'Φ', greekLower: 'φ' },
+      { name: 'Chi', symbol: 'Ch', sound: 'hee', greekUpper: 'Χ', greekLower: 'χ' },
+      { name: 'Psi', symbol: 'Ps', sound: 'psee', greekUpper: 'Ψ', greekLower: 'ψ' },
+      { name: 'Omega', symbol: 'O', sound: 'oh', greekUpper: 'Ω', greekLower: 'ω' }
+    ];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      requireAuth();
+      loadAuthNav();
+      renderAlphabet();
+      document.getElementById('home-redirect').addEventListener('click', () => {
+        window.location.href = '/greek-learning-path.html';
+      });
+      document.getElementById('add-all-btn').addEventListener('click', addAllAlphabetFlashcards);
+      document.getElementById('complete-lesson-btn').addEventListener('click', completeLesson);
+    });
+
+    function renderAlphabet() {
+      const grid = document.getElementById('alphabet-grid');
+      grid.innerHTML = '';
+
+      alphabet.forEach((letter) => {
+        const card = document.createElement('div');
+        card.className = 'alphabet-card';
+        card.innerHTML = `
+          <div>
+            <div class="alphabet-name">${letter.name} (${letter.symbol})</div>
+            <div class="alphabet-sound">${letter.sound} — ${letter.greekUpper} ${letter.greekLower}</div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function addAllAlphabetFlashcards() {
+      const flashcards = JSON.parse(localStorage.getItem('kosmosFlashcards') || '[]');
+      let addedCount = 0;
+      alphabet.forEach(letter => {
+        const cardData = {
+          english: `${letter.name} (${letter.symbol}) - ${letter.sound}`,
+          greek: `${letter.greekUpper} ${letter.greekLower}`
+        };
+        const alreadyExists = flashcards.some(f => f.english === cardData.english && f.greek === cardData.greek);
+        if (!alreadyExists) {
+          flashcards.push(cardData);
+          addedCount += 1;
+        }
+      });
+      localStorage.setItem('kosmosFlashcards', JSON.stringify(flashcards));
+      alert(addedCount > 0 ? `Added ${addedCount} new alphabet flashcards.` : 'All alphabet flashcards are already in your collection.');
+    }
+
+    function completeLesson() {
+      localStorage.setItem('lesson1Completed', 'true');
+      alert('Lesson 1 complete! Return to the learning path and move on to Lesson 2.');
+    }
+  </script>
+</body>
+</html>

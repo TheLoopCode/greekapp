@@ -14,8 +14,20 @@ function requireAuth() {
 
 function redirectIfAuthenticated() {
   if (isAuthenticated()) {
-    window.location.href = '/';
+    window.location.href = '/dashboard.html';
   }
+}
+
+function bindBrandLink() {
+  const brand = document.querySelector('.brand');
+  if (!brand) {
+    return;
+  }
+
+  brand.style.cursor = 'pointer';
+  brand.addEventListener('click', () => {
+    window.location.href = isAuthenticated() ? '/dashboard.html' : '/';
+  });
 }
 
 function personalizeHomePage() {
@@ -109,6 +121,7 @@ function loadAuthNav() {
     return;
   }
 
+  bindBrandLink();
   nav.innerHTML = '';
 
   if (isAuthenticated()) {

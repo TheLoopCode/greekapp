@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Greek Alphabet | Kosmos</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">Kosmos</div>
+    <nav class="nav-links" id="nav-auth"></nav>
+  </header>
+
+  <main class="page-shell">
+    <section class="hero-card">
+      <h1>Greek Alphabet</h1>
+      <p>Learn the letters of the Greek alphabet and their pronunciations.</p>
+    </section>
+
+    <section class="tool-content">
+      <div class="alphabet-grid">
+        <div class="letter">Α α - Alpha (ah)</div>
+        <div class="letter">Β β - Beta (beh)</div>
+        <div class="letter">Γ γ - Gamma (ghah)</div>
+        <div class="letter">Δ δ - Delta (thel)</div>
+        <div class="letter">Ε ε - Epsilon (eh)</div>
+        <div class="letter">Ζ ζ - Zeta (zee)</div>
+        <div class="letter">Η η - Eta (ee)</div>
+        <div class="letter">Θ θ - Theta (thee)</div>
+        <div class="letter">Ι ι - Iota (ee)</div>
+        <div class="letter">Κ κ - Kappa (kah)</div>
+        <div class="letter">Λ λ - Lambda (lah)</div>
+        <div class="letter">Μ μ - Mu (moo)</div>
+        <div class="letter">Ν ν - Nu (noo)</div>
+        <div class="letter">Ξ ξ - Xi (ksee)</div>
+        <div class="letter">Ο ο - Omicron (oh)</div>
+        <div class="letter">Π π - Pi (pee)</div>
+        <div class="letter">Ρ ρ - Rho (roh)</div>
+        <div class="letter">Σ σ/ς - Sigma (see)</div>
+        <div class="letter">Τ τ - Tau (tah)</div>
+        <div class="letter">Υ υ - Upsilon (oo)</div>
+        <div class="letter">Φ φ - Phi (fee)</div>
+        <div class="letter">Χ χ - Chi (hee)</div>
+        <div class="letter">Ψ ψ - Psi (psee)</div>
+        <div class="letter">Ω ω - Omega (oh)</div>
+      </div>
+    </section>
+  </main>
+
+  <script src="/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      requireAuth();
+      loadAuthNav();
+    });
+  </script>
+</body>
+</html>
